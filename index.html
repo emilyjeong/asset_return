@@ -173,11 +173,9 @@ body::before { content:''; position: absolute; top:-200vh; left:-100vw; right:-1
 
 <div id="dashboard"></div>
 
+<script src="config.js"></script>
 <script>
-// ─────────────────────────────────────────────────────
-// ⚠️ 배포 후 여기에 Apps Script Web App URL 붙여넣기
-// ─────────────────────────────────────────────────────
-const GAS_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+// GAS_URL은 config.js에서 가져옴 (window.GAS_URL)
 
 const fmtNum = (n) => {
   if (n === null || n === undefined || n === '') return '—';
@@ -473,13 +471,14 @@ async function load() {
   document.getElementById('status').classList.remove('error');
   document.getElementById('status-text').textContent = '로딩 중...';
 
-  if (GAS_URL.indexOf('PASTE_YOUR') === 0) {
-    showError('GAS_URL이 설정되지 않음. index.html 상단 GAS_URL 변수를 수정하세요.');
+  const url = window.GAS_URL;
+  if (!url || url.indexOf('PASTE_YOUR') === 0) {
+    showError('GAS_URL이 설정되지 않음. config.js 파일에서 GAS_URL을 본인 Apps Script Web App URL로 교체하세요.');
     return;
   }
 
   try {
-    const res = await fetch(GAS_URL + '?t=' + Date.now());
+    const res = await fetch(url + '?t=' + Date.now());
     const data = await res.json();
     if (data.error) { showError(data.error); return; }
 
