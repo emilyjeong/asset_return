@@ -72,8 +72,8 @@ body::before { content:''; position: absolute; top:-200vh; left:-100vw; right:-1
 .detail-toggle[open] summary { border-bottom: 1px solid var(--line); }
 .detail-toggle .inner { padding: 4px 16px 18px; }
 
-.simple-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 10px; }
-.realestate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+.simple-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.realestate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 10px; }
 
 .box { background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 14px 14px 18px; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
 .box::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 2px; background: var(--line); }
@@ -92,10 +92,15 @@ body::before { content:''; position: absolute; top:-200vh; left:-100vw; right:-1
 .box-r .r-label { display: block; font-size: 9px; letter-spacing: 0.18em; color: var(--ink-soft); font-weight: 500; text-transform: uppercase; margin-bottom: 2px; opacity: 0.75; }
 .box-r.pos { color: var(--pos); } .box-r.neg { color: var(--neg); } .box-r.tbd { color: var(--ink-muted); font-style: italic; } .box-r.live { color: var(--live); }
 
-.row { display: flex; justify-content: space-between; align-items: baseline; padding: 3px 0; font-size: 12px; gap: 8px; }
-.row .lbl { color: var(--ink-soft); font-size: 11px; white-space: nowrap; }
-.row .lbl .date { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); margin-right: 5px; opacity: 0.85; }
-.row .val { font-family: var(--mono); font-size: 12px; text-align: right; word-break: keep-all; color: var(--ink); }
+.row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; padding: 3px 0; font-size: 12px; gap: 8px; }
+.row .lbl { color: var(--ink-soft); font-size: 11px; min-width: 0; }
+.row .lbl .date { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); margin-right: 5px; opacity: 0.85; display: inline-block; }
+.row .val { font-family: var(--mono); font-size: 12px; text-align: right; word-break: keep-all; color: var(--ink); white-space: nowrap; }
+
+/* Stacked variant: label on top, value below right-aligned (used for simple accounts 연초/평가금) */
+.row.stack { display: block; padding: 5px 0; }
+.row.stack .lbl { display: block; margin-bottom: 3px; font-size: 11px; }
+.row.stack .val { display: block; text-align: right; font-size: 13px; font-weight: 500; }
 .row .val.tbd { color: var(--ink-muted); font-style: italic; }
 .row .val.linked { color: var(--gold); }
 .row .val.live { color: var(--live); font-weight: 600; }
@@ -168,11 +173,11 @@ body::before { content:''; position: absolute; top:-200vh; left:-100vw; right:-1
 
 <div id="dashboard"></div>
 
-<script> 
+<script>
 // ─────────────────────────────────────────────────────
 // ⚠️ 배포 후 여기에 Apps Script Web App URL 붙여넣기
 // ─────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycby5ewdTUM6bJJQERXkLgjodj8GSED7pHMww4hQ4pIFDJ4VMyVdXVrUIzYvNJwMc_U1q/exec';
+const GAS_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
 const fmtNum = (n) => {
   if (n === null || n === undefined || n === '') return '—';
@@ -208,16 +213,17 @@ function renderSimpleBox(acc, year, isCurrent) {
   const cat = acc.category || '';
   const owner = CAT_OWNER[acc.name] || '';
 
-  const box = el('div', 'box cat-' + cat + (isCurrent ? ' live-snap' : '') + (isFirstTracked && !isCurrent ? '' : ''));
+  const box = el('div', 'box cat-' + cat + (isCurrent ? ' live-snap' : ''));
 
   const rClass = (acc.r === null || acc.r === '') ? 'tbd' : (isCurrent ? 'live' : pctClass(acc.r));
   const rText = (acc.r === null || acc.r === '') ? '—' : fmtPct(acc.r);
 
+  const startDate = year.toString().substring(2) + '-01-01';
+  const evalDateStr = isCurrent ? formatEvalDate(year, acc, true) : year.toString().substring(2) + '-12-31';
+
   const startVal = isFirstTracked
     ? `<span class="val">−1</span>`
     : `<span class="val linked">↳ ${fmtNum(acc.start)}</span>`;
-
-  const evalDateStr = isCurrent ? formatEvalDate(year, acc, true) : (year + '-12-31').substring(2);
 
   box.innerHTML = `
     <div class="box-header">
@@ -227,20 +233,36 @@ function renderSimpleBox(acc, year, isCurrent) {
       </div>
       <div class="box-r ${rClass}"><span class="r-label">SimpleR</span>${rText}</div>
     </div>
-    <div class="row"><span class="lbl"><span class="date">${year.toString().substring(2)}-01-01</span>연초</span>${startVal}</div>
+    <div class="row stack"><span class="lbl">연초<span class="date" style="margin-left:5px;margin-right:0;">${startDate}</span></span>${startVal}</div>
     <div class="row input-row"><span class="lbl">Input</span><span class="val ${acc.input ? '' : 'tbd'}">${acc.input ? fmtNum(acc.input) : '입력대기'}</span></div>
-    <div class="row end-row"><span class="lbl"><span class="date">${evalDateStr}</span>${isCurrent ? '평가금' : '연말'}</span><span class="val ${acc.end ? (isCurrent ? 'live' : '') : 'tbd'}">${acc.end ? fmtNum(acc.end) : '입력대기'}</span></div>
+    <div class="row stack end-row"><span class="lbl">${isCurrent ? '평가금' : '연말'}<span class="date" style="margin-left:5px;margin-right:0;">${evalDateStr}</span></span><span class="val ${acc.end ? (isCurrent ? 'live' : '') : 'tbd'}">${acc.end ? fmtNum(acc.end) : '입력대기'}</span></div>
   `;
   return box;
 }
 
-function renderREbox(prop, year, isCurrent) {
+function renderREbox(prop, year, isCurrent, allYears) {
   const owner = CAT_OWNER[prop.name] || '';
   const isFirstTracked = (prop.trackYear === 1);
   const box = el('div', 'box cat-부동산' + (isCurrent ? ' live-snap' : ''));
   const rClass = (prop.r === null || prop.r === '') ? 'tbd' : (isCurrent ? 'live' : pctClass(prop.r));
   const rText = (prop.r === null || prop.r === '') ? '—' : fmtPct(prop.r);
-  const evalDateStr = isCurrent ? formatEvalDate(year, prop, true) : (year + '-12-31').substring(2);
+  const evalDateStr = isCurrent ? formatEvalDate(year, prop, true) : year.toString().substring(2) + '-12-31';
+  const startDate = year.toString().substring(2) + '-01-01';
+
+  // Find previous year's KB price for this property
+  let prevKb = null;
+  if (!isFirstTracked && allYears) {
+    const prevYear = allYears.find(y => y.year === year - 1);
+    if (prevYear) {
+      const prevProp = prevYear.realestate.find(p => p.name === prop.name);
+      if (prevProp) prevKb = prevProp.kbPrice;
+    }
+  }
+
+  // Start remaining debt = current remaining - this year's input
+  const startRemainingDebt = (prop.remainingDebt !== null && prop.yearInput !== null)
+    ? prop.remainingDebt - (prop.yearInput || 0)
+    : null;
 
   let topRows;
   if (isFirstTracked) {
@@ -249,10 +271,9 @@ function renderREbox(prop, year, isCurrent) {
       <div class="row"><span class="lbl">초기대출</span><span class="val">+${fmtNum(prop.initialDebt)}</span></div>
     `;
   } else {
-    // continuation year — show carried-forward values
     topRows = `
-      <div class="row"><span class="lbl"><span class="date">${year.toString().substring(2)}-01-01</span>시작 KB시세</span><span class="val linked">↳ 자동연결</span></div>
-      <div class="row"><span class="lbl"><span class="date">${year.toString().substring(2)}-01-01</span>시작 잔여대출</span><span class="val linked">↳ ${fmtNum(prop.remainingDebt - (prop.yearInput || 0))}</span></div>
+      <div class="row"><span class="lbl">시작 KB시세<span class="date" style="margin-left:5px;margin-right:0;">${startDate}</span></span><span class="val linked">↳ ${prevKb ? fmtNum(prevKb) : '—'}</span></div>
+      <div class="row"><span class="lbl">시작 잔여대출<span class="date" style="margin-left:5px;margin-right:0;">${startDate}</span></span><span class="val linked">↳ ${startRemainingDebt !== null ? fmtNum(startRemainingDebt) : '—'}</span></div>
     `;
   }
 
@@ -266,8 +287,8 @@ function renderREbox(prop, year, isCurrent) {
     </div>
     ${topRows}
     <div class="row input-row"><span class="lbl">Input <span style="font-size:9px;color:var(--ink-muted);">(갚은 원금)</span></span><span class="val ${prop.yearInput ? '' : 'tbd'}">${prop.yearInput ? fmtNum(prop.yearInput) : '입력대기'}</span></div>
-    <div class="row"><span class="lbl"><span class="date">${evalDateStr}</span>KB시세</span><span class="val ${prop.kbPrice ? (isCurrent ? 'live' : '') : 'tbd'}">${prop.kbPrice ? fmtNum(prop.kbPrice) : '입력대기'}</span></div>
-    <div class="row net-row"><span class="lbl"><span class="date">${evalDateStr}</span>NET</span><span class="val">${prop.net ? fmtNum(prop.net) : '—'}</span></div>
+    <div class="row"><span class="lbl">KB시세<span class="date" style="margin-left:5px;margin-right:0;">${evalDateStr}</span></span><span class="val ${prop.kbPrice ? (isCurrent ? 'live' : '') : 'tbd'}">${prop.kbPrice ? fmtNum(prop.kbPrice) : '입력대기'}</span></div>
+    <div class="row net-row"><span class="lbl">NET<span class="date" style="margin-left:5px;margin-right:0;">${evalDateStr}</span></span><span class="val">${prop.net ? fmtNum(prop.net) : '—'}</span></div>
   `;
   return box;
 }
@@ -348,7 +369,7 @@ function renderSummary(year) {
   return wrap;
 }
 
-function renderYear(year, isCurrent) {
+function renderYear(year, isCurrent, allYears) {
   const sec = el('section', 'year-block');
   const isPast = !isCurrent && year.year < new Date().getFullYear();
 
@@ -381,7 +402,7 @@ function renderYear(year, isCurrent) {
     if (year.realestate.length > 0) {
       wrap.appendChild(el('div', 'section-title', '부동산'));
       const grid = el('div', 'realestate-grid');
-      year.realestate.forEach(p => grid.appendChild(renderREbox(p, year.year, isCurrent)));
+      year.realestate.forEach(p => grid.appendChild(renderREbox(p, year.year, isCurrent, allYears)));
       wrap.appendChild(grid);
     }
     return wrap;
@@ -477,7 +498,7 @@ async function load() {
     }
 
     data.years.forEach(yr => {
-      dash.appendChild(renderYear(yr, yr.year === data.currentYear));
+      dash.appendChild(renderYear(yr, yr.year === data.currentYear, data.years));
     });
 
     if (data.realestateTotal && data.realestateTotal.length > 0) {
