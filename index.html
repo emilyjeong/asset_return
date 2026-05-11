@@ -79,14 +79,14 @@ body {
 .box-r.pos { color: #00e5a0; }
 .box-r.neg { color: #ff4d6a; }
 .box-r.tbd { color: #5a6280; font-style: italic; }
-.box-r.live { color: #ff4d6a; }
 
 .row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; padding: 2px 0; font-size: 11px; gap: 6px; }
 .row .lbl { color: #a0a8c0; font-size: 10px; }
 .row .lbl .date { font-family: ‘JetBrains Mono’, monospace; font-size: 9px; color: #a0a8c0; margin-left: 4px; opacity: 0.8; }
 .row .val { font-family: ‘JetBrains Mono’, monospace; font-size: 11px; text-align: right; color: #f0f2fa; white-space: nowrap; }
 .row .val.tbd { color: #5a6280; font-style: italic; }
-.row .val.linked { color: #ffcc00; }
+.row .val.linked { color: #7a8095; }
+.row .val.input-val { color: #ffcc00; }
 .row .val.live { color: #ff4d6a; font-weight: 600; }
 
 .row.stack { display: block; padding: 4px 0; }
@@ -153,8 +153,7 @@ body { max-width: 720px; padding: 24px 18px 50px; }
 <body>
 
 <header class="intro">
-  <h1>자산수익률 <em>/ Annual</em></h1>
-  <p>연도별 단순수익률 추적 — 연초 = 전년 종가 자동참조</p>
+  <h1>총자산 연수익률</h1>
 </header>
 
 <div class="status-bar" id="status">
@@ -214,29 +213,31 @@ function renderSimpleBox(acc, year, isCurrent) {
   const cat = acc.category || '';
   const owner = CAT_OWNER[acc.name] || '';
   const isNew = (acc.name === '401K' && year === 2026);
+  const displayName = acc.name;
   const box = el('div', 'box cat-' + cat + (isCurrent ? ' live-snap' : '') + (isNew ? ' is-new' : ''));
-  const rClass = (acc.r === null || acc.r === '') ? 'tbd' : (isCurrent ? 'live' : pctClass(acc.r));
+  const rClass = (acc.r === null || acc.r === '') ? 'tbd' : pctClass(acc.r);
   const rText = (acc.r === null || acc.r === '') ? '—' : fmtPct(acc.r);
   const startDate = year.toString().substring(2) + '-01-01';
   const evalDateStr = isCurrent ? todayStr(year) : year.toString().substring(2) + '-12-31';
   const startVal = isFirstTracked ? `<span class="val">−1</span>` : `<span class="val linked">↳ ${fmtNum(acc.start)}</span>`;
   box.innerHTML = `
     <div class="box-header">
-      <div><div class="box-name">${acc.name}</div><div class="box-cat">${cat} · ${owner}</div></div>
-      <div class="box-r ${rClass}"><span class="r-label">SimpleR</span>${rText}</div>
+      <div><div class="box-name">${displayName}</div><div class="box-cat">${cat} · ${owner}</div></div>
+      <div class="box-r ${rClass}"><span class="r-label">단순수익률</span>${rText}</div>
     </div>
     <div class="row stack"><span class="lbl">연초<span class="date">${startDate}</span></span>${startVal}</div>
-    <div class="row input-row"><span class="lbl">Input</span><span class="val ${acc.input ? '' : 'tbd'}">${acc.input ? fmtNum(acc.input) : '입력대기'}</span></div>
+    <div class="row input-row"><span class="lbl">Input</span><span class="val ${acc.input ? 'input-val' : 'tbd'}">${acc.input ? fmtNum(acc.input) : '입력대기'}</span></div>
     <div class="row stack end-row"><span class="lbl">${isCurrent ? '평가금' : '연말'}<span class="date">${evalDateStr}</span></span><span class="val ${acc.end ? (isCurrent ? 'live' : '') : 'tbd'}">${acc.end ? fmtNum(acc.end) : '입력대기'}</span></div>
   `;
   return box;
 }
 
 function renderREbox(prop, year, isCurrent, allYears) {
+  const displayName = prop.name === 'NS' ? 'NSTW' : prop.name;
   const owner = CAT_OWNER[prop.name] || '';
   const isFirstTracked = (prop.trackYear === 1);
   const box = el('div', 'box cat-부동산' + (isCurrent ? ' live-snap' : ''));
-  const rClass = (prop.r === null || prop.r === '') ? 'tbd' : (isCurrent ? 'live' : pctClass(prop.r));
+  const rClass = (prop.r === null || prop.r === '') ? 'tbd' : pctClass(prop.r);
   const rText = (prop.r === null || prop.r === '') ? '—' : fmtPct(prop.r);
   const evalDateStr = isCurrent ? todayStr(year) : year.toString().substring(2) + '-12-31';
   const startDate = year.toString().substring(2) + '-01-01';
@@ -258,18 +259,18 @@ function renderREbox(prop, year, isCurrent, allYears) {
     `;
   } else {
     topRows = `
-      <div class="row"><span class="lbl">시작 KB시세<span class="date">${startDate}</span></span><span class="val linked">↳ ${prevKb ? fmtNum(prevKb) : '—'}</span></div>
-      <div class="row"><span class="lbl">시작 잔여대출<span class="date">${startDate}</span></span><span class="val linked">↳ ${prevRemainingDebt !== null ? fmtNum(prevRemainingDebt) : '—'}</span></div>
+      <div class="row"><span class="lbl">시작 KB시세<span class="date">${startDate}</span></span><span class="val linked">${prevKb ? fmtNum(prevKb) : '—'}</span></div>
+      <div class="row"><span class="lbl">시작 잔여대출<span class="date">${startDate}</span></span><span class="val linked">${prevRemainingDebt !== null ? fmtNum(prevRemainingDebt) : '—'}</span></div>
     `;
   }
 
   box.innerHTML = `
     <div class="box-header">
-      <div><div class="box-name">${prop.name}</div><div class="box-cat">부동산 · ${owner}</div></div>
-      <div class="box-r ${rClass}"><span class="r-label">SimpleR</span>${rText}</div>
+      <div><div class="box-name">${displayName}</div><div class="box-cat">부동산 · ${owner}</div></div>
+      <div class="box-r ${rClass}"><span class="r-label">단순수익률</span>${rText}</div>
     </div>
     ${topRows}
-    <div class="row input-row"><span class="lbl">Input <span style="font-size:8px;color:#5a6280;">(갚은 원금)</span></span><span class="val ${prop.yearInput ? '' : 'tbd'}">${prop.yearInput ? fmtNum(prop.yearInput) : '입력대기'}</span></div>
+    <div class="row input-row"><span class="lbl">Input</span><span class="val ${prop.yearInput ? 'input-val' : 'tbd'}">${prop.yearInput ? fmtNum(prop.yearInput) : '입력대기'}</span></div>
     <div class="row"><span class="lbl">KB시세<span class="date">${evalDateStr}</span></span><span class="val ${prop.kbPrice ? (isCurrent ? 'live' : '') : 'tbd'}">${prop.kbPrice ? fmtNum(prop.kbPrice) : '입력대기'}</span></div>
     <div class="row net-row"><span class="lbl">NET<span class="date">${evalDateStr}</span></span><span class="val">${prop.net ? fmtNum(prop.net) : '—'}</span></div>
   `;
@@ -300,10 +301,10 @@ function renderSummary(year) {
 
   wrap.innerHTML = `
     <div class="summary-grid">
-      <div class="summary-item highlight"><div class="lbl">TTL 평가금</div><div class="val ${s.ttl ? '' : 'tbd'}">${s.ttl ? fmtNum(s.ttl) : '입력대기'}</div></div>
-      <div class="summary-item"><div class="lbl">Total Return</div><div class="val ${s.totalReturn !== null ? pctClass(s.totalReturn) : 'tbd'}">${fmtPct(s.totalReturn)}</div></div>
-      <div class="summary-item"><div class="lbl">단순평균 R</div><div class="val ${s.avgR !== null ? pctClass(s.avgR) : 'tbd'}">${fmtPct(s.avgR)}</div></div>
-      <div class="summary-item"><div class="lbl">YTD Input</div><div class="val">${fmtNum(s.ytdInput)}</div></div>
+      <div class="summary-item highlight"><div class="lbl">TOTAL 평가금</div><div class="val ${s.ttl ? '' : 'tbd'}">${s.ttl ? fmtNum(s.ttl) : '입력대기'}</div></div>
+      <div class="summary-item"><div class="lbl">누적 수익률</div><div class="val ${s.totalReturn !== null ? pctClass(s.totalReturn) : 'tbd'}">${fmtPct(s.totalReturn)}</div></div>
+      <div class="summary-item"><div class="lbl">단순수익률</div><div class="val ${s.avgR !== null ? pctClass(s.avgR) : 'tbd'}">${fmtPct(s.avgR)}</div></div>
+      <div class="summary-item"><div class="lbl">TOTAL INPUT</div><div class="val">${fmtNum(s.ytdInput)}</div></div>
     </div>
   `;
 
@@ -348,10 +349,13 @@ function renderYear(year, isCurrent, allYears) {
       wrap.appendChild(el('div', 'connection-flow', `<span class="arrow">↳</span> 연초 = 전년 연말 자동참조`));
     }
     if (year.simple.length > 0) {
-      wrap.appendChild(el('div', 'section-title', `단순형 (${year.simple.length})`));
-      const grid = el('div', 'simple-grid');
-      year.simple.forEach(acc => grid.appendChild(renderSimpleBox(acc, year.year, isCurrent)));
-      wrap.appendChild(grid);
+      const visibleSimple = year.simple.filter(a => a.name !== 'KB2');
+      if (visibleSimple.length > 0) {
+        wrap.appendChild(el('div', 'section-title', `단순형 (${visibleSimple.length})`));
+        const grid = el('div', 'simple-grid');
+        visibleSimple.forEach(acc => grid.appendChild(renderSimpleBox(acc, year.year, isCurrent)));
+        wrap.appendChild(grid);
+      }
     }
     if (year.realestate.length > 0) {
       wrap.appendChild(el('div', 'section-title', '부동산'));
@@ -382,23 +386,40 @@ function renderYear(year, isCurrent, allYears) {
   return sec;
 }
 
+function holdingPeriodStr(buyDateStr) {
+  if (!buyDateStr) return '';
+  const buy = new Date(buyDateStr);
+  if (isNaN(buy.getTime())) return '';
+  const now = new Date();
+  let years = now.getFullYear() - buy.getFullYear();
+  let months = now.getMonth() - buy.getMonth();
+  if (now.getDate() < buy.getDate()) months--;
+  if (months < 0) { years--; months += 12; }
+  if (years <= 0 && months <= 0) return '0개월 보유';
+  if (years <= 0) return months + '개월 보유';
+  if (months <= 0) return years + '년 보유';
+  return years + '년 ' + months + '개월 보유';
+}
+
 function renderREtotal(properties) {
   const sec = el('section', 'permanent');
-  sec.innerHTML = `<div class="head"><h2><em>부동산</em> 토탈</h2><span class="sub">BUY → 현 시점</span></div>`;
+  sec.innerHTML = `<div class="head"><h2><em>부동산</em> Total</h2><span class="sub">BUY → 현 시점</span></div>`;
   const grid = el('div', 'perm-grid');
   properties.forEach(p => {
+    const displayName = p.name === 'NS' ? 'NSTW' : p.name;
+    const hold = holdingPeriodStr(p.buyDate);
     const box = el('div', 'box cat-부동산');
     box.innerHTML = `
       <div class="box-header">
-        <div><div class="box-name">${p.name}</div><div class="box-cat">${p.buyDate || ''} BUY</div></div>
-        <div class="box-r ${pctClass(p.annualized)}"><span class="r-label">Annualized</span>${fmtPct(p.annualized)}</div>
+        <div><div class="box-name">${displayName}</div><div class="box-cat">${p.buyDate || ''} BUY · ${hold}</div></div>
+        <div class="box-r ${pctClass(p.annualized)}"><span class="r-label">연환산 수익률</span>${fmtPct(p.annualized)}</div>
       </div>
       <div class="row"><span class="lbl">BUY</span><span class="val">${fmtNum(p.buyPrice)}</span></div>
       <div class="row"><span class="lbl">잔여대출</span><span class="val">${fmtNum(p.remainingDebt)}</span></div>
       <div class="row"><span class="lbl">CUM INPUT</span><span class="val">${fmtNum(p.cumInput)}</span></div>
-      <div class="row"><span class="lbl">KB시세 (현)</span><span class="val live">${fmtNum(p.kbPrice)}</span></div>
+      <div class="row"><span class="lbl">KB시세 (현)</span><span class="val">${fmtNum(p.kbPrice)}</span></div>
       <div class="row net-row"><span class="lbl">NET</span><span class="val">${fmtNum(p.net)}</span></div>
-      <div class="row" style="margin-top:4px;"><span class="lbl">Total Return</span><span class="val ${pctClass(p.totalReturn)}">${fmtPct(p.totalReturn)}</span></div>
+      <div class="row" style="margin-top:4px;"><span class="lbl">누적 수익률</span><span class="val ${pctClass(p.totalReturn)}">${fmtPct(p.totalReturn)}</span></div>
     `;
     grid.appendChild(box);
   });
