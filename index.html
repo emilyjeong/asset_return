@@ -7,154 +7,143 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#08090f">
 <title>자산수익률 / Annual</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400;1,9..144,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <style>
-:root {
-  --bg: #08090f; --bg-card: #111526; --bg-soft: #0d1020; --bg-elevated: #1a1f35;
-  --ink: #f0f2fa; --ink-soft: #a0a8c0; --ink-muted: #5a6280; --ink-faint: #2a3050;
-  --line: #4a5590; --line-strong: #5a6aa0;
-  --pos: #00e5a0; --neg: #ff4d6a; --accent: #ffcc00; --gold: #ffcc00; --live: #ff4d6a;
-  --c-부동산: #4dabf7; --c-주식: #ffcc00; --c-btc: #ff7a45; --c-연금: #00e5a0; --c-퇴직금: #c5b3ff;
-  --display: 'Fraunces','Pretendard',serif;
-  --body: 'Pretendard',system-ui,sans-serif;
-  --mono: 'JetBrains Mono',monospace;
-}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; background-color: #08090f !important; color-scheme: dark; min-height: 100%; }
-html::before { content: ''; position: fixed; top:0; left:0; width:100vw; height:100vh; background-color:#08090f; z-index:-1; pointer-events:none; }
+html, body { background-color: #08090f !important; color-scheme: dark; }
+html { -webkit-text-size-adjust: 100%; min-height: 100%; }
+html::before { content: ''; position: fixed; inset: 0; background-color: #08090f; z-index: -1; }
 body {
-  font-family: var(--body);
+  font-family: 'Pretendard', system-ui, sans-serif;
   background-color: #08090f !important;
-  color: var(--ink); line-height: 1.5; font-size: 14px;
-  font-feature-settings: 'tnum' 1, 'ss01' 1;
-  padding: 28px 18px 60px; max-width: 1280px; margin: 0 auto;
-  min-height: 100vh; position: relative; z-index: 0;
+  color: #f0f2fa;
+  line-height: 1.5;
+  font-size: 14px;
+  font-feature-settings: 'tnum' 1;
+  padding: 18px 12px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
 }
-body::before { content:''; position: absolute; top:-200vh; left:-100vw; right:-100vw; bottom:-200vh; background-color:#08090f; z-index:-1; pointer-events:none; }
+.intro { margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #4a5590; }
+.intro h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px; color: #f0f2fa; }
+.intro h1 em { font-style: italic; color: #ffcc00; }
+.intro p { color: #a0a8c0; font-size: 12px; line-height: 1.5; }
 
-.intro { margin-bottom: 32px; padding-bottom: 22px; border-bottom: 1px solid var(–line); }
-.intro h1 { font-family: var(–display); font-weight: 400; font-size: 38px; letter-spacing: -0.025em; line-height: 1.05; margin-bottom: 6px; }
-.intro h1 em { font-style: italic; color: var(–gold); }
-.intro p { color: var(–ink-soft); font-size: 14px; max-width: 640px; line-height: 1.6; }
+.status-bar { display: flex; align-items: center; justify-content: space-between; margin: 10px 0 16px; padding: 8px 12px; background: #111526; border: 1px solid #4a5590; border-radius: 8px; font-family: ‘JetBrains Mono’, monospace; font-size: 10px; color: #a0a8c0; }
+.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #00e5a0; margin-right: 5px; animation: blink 2s infinite; }
+.refresh-btn { background: transparent; border: 1px solid #4a5590; color: #a0a8c0; font-family: ‘JetBrains Mono’, monospace; font-size: 10px; padding: 4px 10px; cursor: pointer; border-radius: 4px; }
+.status-bar.error { border-color: #ff4d6a; color: #ff4d6a; }
 
-.status-bar {
-display: flex; align-items: center; justify-content: space-between;
-margin: 14px 0 24px; padding: 10px 14px;
-background: var(–bg-card); border: 1px solid var(–line); border-radius: 8px;
-font-family: var(–mono); font-size: 11px; color: var(–ink-soft);
-}
-.status-bar .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(–pos); margin-right: 6px; animation: blink 2s infinite; }
-.status-bar .refresh-btn {
-background: transparent; border: 1px solid var(–line);
-color: var(–ink-soft); font-family: var(–mono); font-size: 11px;
-padding: 5px 12px; cursor: pointer; border-radius: 4px; transition: all 0.15s;
-}
-.status-bar .refresh-btn:hover { background: var(–bg-elevated); color: var(–ink); }
-.status-bar.error { border-color: var(–neg); color: var(–neg); }
+.year-block { margin-bottom: 28px; }
+.year-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #f0f2fa; flex-wrap: wrap; }
+.year-header .yr { font-family: ‘Fraunces’, serif; font-style: italic; font-weight: 400; font-size: 42px; line-height: 0.9; letter-spacing: -0.03em; color: #f0f2fa; }
+.year-header .label { font-size: 11px; letter-spacing: 0.1em; color: #a0a8c0; flex: 1; min-width: 80px; font-family: ‘JetBrains Mono’, monospace; }
+.year-header .badge { font-size: 9px; padding: 3px 8px; letter-spacing: 0.15em; font-family: ‘JetBrains Mono’, monospace; border-radius: 3px; font-weight: 600; }
+.year-header .badge.current { background: #ff4d6a; color: white; }
+.year-header .badge.past { background: transparent; border: 1px solid #5a6aa0; color: #a0a8c0; }
 
-.year-block { margin-bottom: 56px; }
-.year-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 2px solid var(–ink); flex-wrap: wrap; }
-.year-header .yr { font-family: var(–display); font-style: italic; font-weight: 400; font-size: 56px; line-height: 0.9; letter-spacing: -0.04em; }
-.year-header .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(–ink-soft); flex: 1; min-width: 100px; font-family: var(–mono); font-weight: 500; }
-.year-header .badge { font-size: 9px; padding: 4px 10px; letter-spacing: 0.18em; text-transform: uppercase; font-family: var(–mono); border-radius: 1px; }
-.year-header .badge.current { background: var(–live); color: white; }
-.year-header .badge.past { background: transparent; border: 1px solid var(–line-strong); color: var(–ink-soft); }
+.section-title { font-size: 10px; letter-spacing: 0.15em; color: #a0a8c0; margin: 16px 0 8px; font-weight: 600; display: flex; align-items: center; gap: 10px; font-family: ‘JetBrains Mono’, monospace; text-transform: uppercase; }
+.section-title::after { content: ‘’; flex: 1; height: 1px; background: #4a5590; }
 
-.section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(–ink-soft); margin: 24px 0 12px; font-weight: 600; display: flex; align-items: center; gap: 12px; font-family: var(–mono); }
-.section-title::after { content: ‘’; flex: 1; height: 1px; background: var(–line); }
+.connection-flow { background: rgba(255,204,0,0.06); border: 1px solid rgba(255,204,0,0.3); border-radius: 6px; padding: 8px 12px; margin: 10px 0; font-size: 10px; color: #a0a8c0; font-family: ‘JetBrains Mono’, monospace; line-height: 1.7; }
+.connection-flow .arrow { color: #ffcc00; }
 
-.detail-toggle { background: var(–bg-soft); border: 1px solid var(–line); border-radius: 10px; margin: 0 0 22px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-.detail-toggle summary { list-style: none; cursor: pointer; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(–ink); user-select: none; transition: background 0.15s; font-weight: 500; }
+.detail-toggle { background: #0d1020; border: 1px solid #4a5590; border-radius: 8px; margin-bottom: 14px; overflow: hidden; }
+.detail-toggle summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #f0f2fa; font-weight: 500; }
 .detail-toggle summary::-webkit-details-marker { display: none; }
-.detail-toggle summary:hover { background: var(–bg-elevated); }
-.detail-toggle summary .arrow { font-family: var(–mono); color: var(–gold); font-size: 14px; transition: transform 0.2s; }
+.detail-toggle summary .arrow { font-family: ‘JetBrains Mono’, monospace; color: #ffcc00; font-size: 12px; transition: transform 0.2s; }
 .detail-toggle[open] summary .arrow { transform: rotate(90deg); }
-.detail-toggle[open] summary { border-bottom: 1px solid var(–line); }
-.detail-toggle .inner { padding: 4px 16px 18px; }
+.detail-toggle[open] summary { border-bottom: 1px solid #4a5590; }
+.detail-toggle .inner { padding: 4px 12px 14px; }
 
-.simple-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
-.realestate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 10px; }
+.simple-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.realestate-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
 
-.box { background: var(–bg-card); border: 1px solid var(–line); border-radius: 10px; padding: 14px 14px 14px 20px; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
-.box::before { content: ‘’; position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 0 2px 2px 0; background: var(–line); z-index: 1; }
-.box.cat-주식::before    { background: var(–c-주식); box-shadow: 0 0 8px var(–c-주식); }
-.box.cat-연금::before    { background: var(–c-연금); box-shadow: 0 0 8px var(–c-연금); }
-.box.cat-퇴직금::before  { background: var(–c-퇴직금); box-shadow: 0 0 8px var(–c-퇴직금); }
-.box.cat-BTC::before     { background: var(–c-btc); box-shadow: 0 0 8px var(–c-btc); }
-.box.cat-부동산::before  { background: var(–c-부동산); box-shadow: 0 0 8px var(–c-부동산); }
-.box.is-new::after { content: ‘NEW’; position: absolute; top: 10px; right: 10px; background: var(–gold); color: var(–bg); font-size: 9px; font-weight: 700; letter-spacing: 0.15em; padding: 2px 7px; font-family: var(–mono); border-radius: 3px; }
-.box.live-snap { background: linear-gradient(180deg, rgba(255,77,106,0.06) 0%, var(–bg-card) 60%); }
+.box { background: #111526; border: 1.5px solid #4a5590; border-radius: 10px; padding: 12px 12px 12px 18px; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.box::before { content: ‘’; position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 0 3px 3px 0; background: #5a6aa0; }
+.box.cat-주식::before    { background: #ffcc00; box-shadow: 0 0 6px rgba(255,204,0,0.6); }
+.box.cat-연금::before    { background: #00e5a0; box-shadow: 0 0 6px rgba(0,229,160,0.6); }
+.box.cat-퇴직금::before  { background: #c5b3ff; box-shadow: 0 0 6px rgba(197,179,255,0.6); }
+.box.cat-BTC::before     { background: #ff7a45; box-shadow: 0 0 6px rgba(255,122,69,0.6); }
+.box.cat-부동산::before  { background: #4dabf7; box-shadow: 0 0 6px rgba(77,171,247,0.6); }
+.box.live-snap { background: linear-gradient(180deg, rgba(255,77,106,0.05) 0%, #111526 60%); }
+.box.is-new::after { content: ‘NEW’; position: absolute; top: 8px; right: 8px; background: #ffcc00; color: #08090f; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 6px; font-family: ‘JetBrains Mono’, monospace; border-radius: 2px; }
 
-.box-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(–line); gap: 8px; }
-.box-name { font-weight: 600; font-size: 14px; line-height: 1.2; }
-.box-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(–ink-soft); margin-top: 3px; font-family: var(–mono); font-weight: 500; }
-.box-r { font-family: var(–mono); font-size: 14px; font-weight: 600; text-align: right; white-space: nowrap; }
-.box-r .r-label { display: block; font-size: 9px; letter-spacing: 0.18em; color: var(–ink-soft); font-weight: 500; text-transform: uppercase; margin-bottom: 2px; opacity: 0.75; }
-.box-r.pos { color: var(–pos); } .box-r.neg { color: var(–neg); } .box-r.tbd { color: var(–ink-muted); font-style: italic; } .box-r.live { color: var(–live); }
+.box-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #2a3050; gap: 6px; }
+.box-name { font-weight: 600; font-size: 13px; color: #f0f2fa; line-height: 1.2; }
+.box-cat { font-size: 9px; letter-spacing: 0.08em; color: #a0a8c0; margin-top: 2px; font-family: ‘JetBrains Mono’, monospace; text-transform: uppercase; }
+.box-r { font-family: ‘JetBrains Mono’, monospace; font-size: 13px; font-weight: 700; text-align: right; white-space: nowrap; }
+.box-r .r-label { display: block; font-size: 8px; letter-spacing: 0.15em; color: #a0a8c0; font-weight: 500; text-transform: uppercase; margin-bottom: 1px; }
+.box-r.pos { color: #00e5a0; }
+.box-r.neg { color: #ff4d6a; }
+.box-r.tbd { color: #5a6280; font-style: italic; }
+.box-r.live { color: #ff4d6a; }
 
-.row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; padding: 3px 0; font-size: 12px; gap: 8px; }
-.row .lbl { color: var(–ink-soft); font-size: 11px; min-width: 0; }
-.row .lbl .date { font-family: var(–mono); font-size: 10px; color: var(–ink-soft); margin-right: 5px; opacity: 0.85; display: inline-block; }
-.row .val { font-family: var(–mono); font-size: 12px; text-align: right; word-break: keep-all; color: var(–ink); white-space: nowrap; }
+.row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; padding: 2px 0; font-size: 11px; gap: 6px; }
+.row .lbl { color: #a0a8c0; font-size: 10px; }
+.row .lbl .date { font-family: ‘JetBrains Mono’, monospace; font-size: 9px; color: #a0a8c0; margin-left: 4px; opacity: 0.8; }
+.row .val { font-family: ‘JetBrains Mono’, monospace; font-size: 11px; text-align: right; color: #f0f2fa; white-space: nowrap; }
+.row .val.tbd { color: #5a6280; font-style: italic; }
+.row .val.linked { color: #ffcc00; }
+.row .val.live { color: #ff4d6a; font-weight: 600; }
 
-/* Stacked variant: label on top, value below right-aligned (used for simple accounts 연초/평가금) */
-.row.stack { display: block; padding: 5px 0; }
-.row.stack .lbl { display: block; margin-bottom: 3px; font-size: 11px; }
-.row.stack .val { display: block; text-align: right; font-size: 13px; font-weight: 500; }
-.row .val.tbd { color: var(–ink-muted); font-style: italic; }
-.row .val.linked { color: var(–gold); }
-.row .val.live { color: var(–live); font-weight: 600; }
-.row.input-row .lbl, .row.input-row .val { color: var(–accent); font-weight: 500; }
-.row.input-row .lbl::before { content: ’↓ ’; color: var(–accent); }
-.row.net-row, .row.end-row { border-top: 1px dotted var(–line-strong); margin-top: 4px; padding-top: 7px; }
-.row.net-row .lbl, .row.end-row .lbl { font-weight: 600; color: var(–ink); }
+.row.stack { display: block; padding: 4px 0; }
+.row.stack .lbl { display: block; margin-bottom: 2px; }
+.row.stack .val { display: block; text-align: right; font-size: 12px; font-weight: 500; }
+
+.row.input-row .lbl, .row.input-row .val { color: #ffcc00; font-weight: 500; }
+.row.input-row .lbl::before { content: ’↓ ’; color: #ffcc00; }
+
+.row.net-row, .row.end-row { border-top: 1px dotted #4a5590; margin-top: 4px; padding-top: 6px; }
+.row.net-row .lbl, .row.end-row .lbl { font-weight: 600; color: #f0f2fa; }
 .row.net-row .val, .row.end-row .val { font-weight: 600; }
 
-.summary { background: var(–bg-card); border: 1px solid var(–line); border-radius: 12px; padding: 20px; margin-top: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
-.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 12px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(–line); }
-.summary-item .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em; color: var(–ink-soft); margin-bottom: 6px; font-family: var(–mono); font-weight: 500; }
-.summary-item .val { font-family: var(–mono); font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: var(–ink); }
+.summary { background: #111526; border: 1.5px solid #4a5590; border-radius: 10px; padding: 14px; margin-top: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #2a3050; }
+.summary-item .lbl { font-size: 9px; letter-spacing: 0.12em; color: #a0a8c0; margin-bottom: 3px; font-family: ‘JetBrains Mono’, monospace; text-transform: uppercase; }
+.summary-item .val { font-family: ‘JetBrains Mono’, monospace; font-size: 16px; font-weight: 500; color: #f0f2fa; }
 .summary-item.highlight .val { font-weight: 700; }
-.summary-item .val.pos { color: var(–pos); }
-.summary-item .val.neg { color: var(–neg); }
-.summary-item .val.tbd { color: var(–ink-muted); font-style: italic; font-size: 14px; }
+.summary-item .val.pos { color: #00e5a0; }
+.summary-item .val.neg { color: #ff4d6a; }
+.summary-item .val.tbd { color: #5a6280; font-style: italic; font-size: 13px; }
 
-.alloc-block { display: grid; grid-template-columns: 200px 1fr; gap: 28px; align-items: center; }
-@media (max-width: 600px) { .alloc-block { grid-template-columns: 1fr; gap: 18px; justify-items: center; } }
-.donut-wrap { position: relative; width: 200px; height: 200px; }
+.alloc-block { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.donut-wrap { position: relative; width: 160px; height: 160px; }
 .donut { width: 100%; height: 100%; border-radius: 50%; position: relative; }
-.donut::after { content: ‘’; position: absolute; inset: 28%; background: var(–bg-card); border-radius: 50%; }
-.donut.placeholder { background: var(–ink-faint); opacity: 0.4; }
+.donut::after { content: ‘’; position: absolute; inset: 28%; background: #111526; border-radius: 50%; }
+.donut.placeholder { background: #2a3050; opacity: 0.5; }
 .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; pointer-events: none; }
-.donut-center .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(–ink-soft); font-family: var(–mono); font-weight: 600; }
-.donut-center .val { font-family: var(–mono); font-size: 18px; font-weight: 700; color: var(–ink); margin-top: 3px; }
-.donut-center .sub { font-family: var(–mono); font-size: 10px; color: var(–ink-soft); margin-top: 2px; }
-.donut-legend { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-.legend-row { display: grid; grid-template-columns: 14px 1fr auto auto; align-items: center; gap: 10px; padding: 9px 12px; background: var(–bg-soft); border-left: 3px solid; border-radius: 6px; font-family: var(–mono); font-size: 11px; }
-.legend-row .dot { width: 10px; height: 10px; border-radius: 2px; }
-.legend-row .name { font-family: var(–body); font-weight: 600; color: var(–ink); font-size: 12px; }
-.legend-row .pct { color: var(–ink-soft); font-size: 11px; font-weight: 500; }
-.legend-row .amt { font-weight: 600; color: var(–ink); text-align: right; }
+.donut-center .lbl { font-size: 9px; letter-spacing: 0.15em; color: #a0a8c0; font-family: ‘JetBrains Mono’, monospace; font-weight: 600; text-transform: uppercase; }
+.donut-center .val { font-family: ‘JetBrains Mono’, monospace; font-size: 16px; font-weight: 700; color: #f0f2fa; margin-top: 2px; }
+.donut-center .sub { font-family: ‘JetBrains Mono’, monospace; font-size: 9px; color: #a0a8c0; margin-top: 1px; }
+.donut-legend { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.legend-row { display: grid; grid-template-columns: 12px 1fr auto auto; align-items: center; gap: 8px; padding: 6px 10px; background: #0d1020; border-left: 3px solid; border-radius: 4px; font-family: ‘JetBrains Mono’, monospace; font-size: 10px; }
+.legend-row .dot { width: 8px; height: 8px; border-radius: 2px; }
+.legend-row .name { font-weight: 600; color: #f0f2fa; font-size: 11px; }
+.legend-row .pct { color: #a0a8c0; font-size: 10px; }
+.legend-row .amt { font-weight: 600; color: #f0f2fa; text-align: right; }
 
-.permanent { background: var(–bg-card); border: 1px solid var(–line); border-radius: 14px; padding: 22px; margin-top: 56px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
-.permanent .head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
-.permanent h2 { font-family: var(–display); font-style: italic; font-weight: 400; font-size: 26px; letter-spacing: -0.02em; }
-.permanent h2 em { color: var(–gold); font-style: normal; font-weight: 600; }
-.permanent .sub { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(–ink-soft); font-family: var(–mono); margin-bottom: 18px; font-weight: 500; }
-.perm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.permanent { background: #111526; border: 1.5px solid #4a5590; border-radius: 10px; padding: 14px; margin-top: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.permanent .head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #2a3050; }
+.permanent h2 { font-family: ‘Fraunces’, serif; font-style: italic; font-weight: 400; font-size: 22px; color: #f0f2fa; }
+.permanent h2 em { color: #ffcc00; font-style: normal; font-weight: 600; }
+.permanent .sub { font-size: 9px; letter-spacing: 0.12em; color: #a0a8c0; font-family: ‘JetBrains Mono’, monospace; text-transform: uppercase; }
+.perm-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
 
-.connection-flow { background: rgba(255,204,0,0.05); border: 1px solid rgba(255,204,0,0.22); border-radius: 8px; padding: 12px 14px; margin: 16px 0; font-size: 11px; color: var(–ink-soft); font-family: var(–mono); line-height: 1.85; }
-.connection-flow .arrow { color: var(–gold); }
+.empty-state { padding: 24px; text-align: center; color: #5a6280; font-style: italic; }
+.error-msg { padding: 16px; background: rgba(255,77,106,0.08); border: 1px solid #ff4d6a; border-radius: 8px; color: #ff4d6a; font-family: ‘JetBrains Mono’, monospace; font-size: 11px; line-height: 1.6; word-break: break-all; }
 
-.empty-state { padding: 40px 20px; text-align: center; color: var(–ink-muted); font-style: italic; }
-.error-msg { padding: 24px; background: rgba(255,77,106,0.08); border: 1px solid var(–neg); border-radius: 10px; color: var(–neg); font-family: var(–mono); font-size: 12px; word-break: break-all; line-height: 1.6; }
-
-@media (max-width: 600px) {
-body { padding: 20px 12px 50px; }
-.year-header .yr { font-size: 44px; }
-.intro h1 { font-size: 26px; }
-.permanent { padding: 16px; }
+@media (min-width: 640px) {
+body { max-width: 720px; padding: 24px 18px 50px; }
+.simple-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.realestate-grid { grid-template-columns: 1fr 1fr; }
+.perm-grid { grid-template-columns: 1fr 1fr; }
+.alloc-block { flex-direction: row; gap: 24px; align-items: center; }
+.donut-wrap { width: 180px; height: 180px; flex-shrink: 0; }
+.year-header .yr { font-size: 52px; }
+.intro h1 { font-size: 32px; }
 }
 
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
@@ -165,7 +154,7 @@ body { padding: 20px 12px 50px; }
 
 <header class="intro">
   <h1>자산수익률 <em>/ Annual</em></h1>
-  <p>연도별 단순수익률(Simple R) 추적 — 매년 12-31 스냅샷, 연초는 전년 종가 자동참조</p>
+  <p>연도별 단순수익률 추적 — 연초 = 전년 종가 자동참조</p>
 </header>
 
 <div class="status-bar" id="status">
@@ -178,8 +167,6 @@ body { padding: 20px 12px 50px; }
 <script src="config.js"></script>
 
 <script>
-// GAS_URL은 config.js에서 가져옴 (window.GAS_URL)
-
 const fmtNum = (n) => {
   if (n === null || n === undefined || n === '') return '—';
   if (typeof n !== 'number' || isNaN(n)) return '—';
@@ -188,12 +175,17 @@ const fmtNum = (n) => {
 const fmtPct = (n) => {
   if (n === null || n === undefined || n === '') return '—';
   if (typeof n !== 'number' || isNaN(n)) return '—';
-  const sign = n > 0 ? '+' : '';
-  return sign + (n * 100).toFixed(1) + '%';
+  return (n > 0 ? '+' : '') + (n * 100).toFixed(1) + '%';
 };
 const pctClass = (n) => {
   if (typeof n !== 'number' || isNaN(n) || n === null) return 'tbd';
   return n >= 0 ? 'pos' : 'neg';
+};
+const fmtCompact = (n) => {
+  if (!n) return '—';
+  if (Math.abs(n) >= 1e8) return Math.round(n/1e6) + 'M';
+  if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(1) + 'M';
+  return fmtNum(n);
 };
 
 const CAT_OWNER = {
@@ -209,34 +201,33 @@ function el(tag, cls, html) {
   return e;
 }
 
+function todayStr(year) {
+  const t = new Date();
+  if (t.getFullYear() === year) {
+    return `${String(t.getFullYear()).substring(2)}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  }
+  return (year + '-12-31').substring(2);
+}
+
 function renderSimpleBox(acc, year, isCurrent) {
   const isFirstTracked = (acc.start === -1);
   const cat = acc.category || '';
   const owner = CAT_OWNER[acc.name] || '';
-
-  const box = el('div', 'box cat-' + cat + (isCurrent ? ' live-snap' : ''));
-
+  const isNew = (acc.name === '401K' && year === 2026);
+  const box = el('div', 'box cat-' + cat + (isCurrent ? ' live-snap' : '') + (isNew ? ' is-new' : ''));
   const rClass = (acc.r === null || acc.r === '') ? 'tbd' : (isCurrent ? 'live' : pctClass(acc.r));
   const rText = (acc.r === null || acc.r === '') ? '—' : fmtPct(acc.r);
-
   const startDate = year.toString().substring(2) + '-01-01';
-  const evalDateStr = isCurrent ? formatEvalDate(year, acc, true) : year.toString().substring(2) + '-12-31';
-
-  const startVal = isFirstTracked
-    ? `<span class="val">−1</span>`
-    : `<span class="val linked">↳ ${fmtNum(acc.start)}</span>`;
-
+  const evalDateStr = isCurrent ? todayStr(year) : year.toString().substring(2) + '-12-31';
+  const startVal = isFirstTracked ? `<span class="val">−1</span>` : `<span class="val linked">↳ ${fmtNum(acc.start)}</span>`;
   box.innerHTML = `
     <div class="box-header">
-      <div>
-        <div class="box-name">${acc.name}</div>
-        <div class="box-cat">${cat} · ${owner}</div>
-      </div>
+      <div><div class="box-name">${acc.name}</div><div class="box-cat">${cat} · ${owner}</div></div>
       <div class="box-r ${rClass}"><span class="r-label">SimpleR</span>${rText}</div>
     </div>
-    <div class="row stack"><span class="lbl">연초<span class="date" style="margin-left:5px;margin-right:0;">${startDate}</span></span>${startVal}</div>
+    <div class="row stack"><span class="lbl">연초<span class="date">${startDate}</span></span>${startVal}</div>
     <div class="row input-row"><span class="lbl">Input</span><span class="val ${acc.input ? '' : 'tbd'}">${acc.input ? fmtNum(acc.input) : '입력대기'}</span></div>
-    <div class="row stack end-row"><span class="lbl">${isCurrent ? '평가금' : '연말'}<span class="date" style="margin-left:5px;margin-right:0;">${evalDateStr}</span></span><span class="val ${acc.end ? (isCurrent ? 'live' : '') : 'tbd'}">${acc.end ? fmtNum(acc.end) : '입력대기'}</span></div>
+    <div class="row stack end-row"><span class="lbl">${isCurrent ? '평가금' : '연말'}<span class="date">${evalDateStr}</span></span><span class="val ${acc.end ? (isCurrent ? 'live' : '') : 'tbd'}">${acc.end ? fmtNum(acc.end) : '입력대기'}</span></div>
   `;
   return box;
 }
@@ -247,20 +238,15 @@ function renderREbox(prop, year, isCurrent, allYears) {
   const box = el('div', 'box cat-부동산' + (isCurrent ? ' live-snap' : ''));
   const rClass = (prop.r === null || prop.r === '') ? 'tbd' : (isCurrent ? 'live' : pctClass(prop.r));
   const rText = (prop.r === null || prop.r === '') ? '—' : fmtPct(prop.r);
-  const evalDateStr = isCurrent ? formatEvalDate(year, prop, true) : year.toString().substring(2) + '-12-31';
+  const evalDateStr = isCurrent ? todayStr(year) : year.toString().substring(2) + '-12-31';
   const startDate = year.toString().substring(2) + '-01-01';
 
-  // Find previous year's KB price + remaining debt for this property
-  let prevKb = null;
-  let prevRemainingDebt = null;
+  let prevKb = null, prevRemainingDebt = null;
   if (!isFirstTracked && allYears) {
     const prevYear = allYears.find(y => y.year === year - 1);
     if (prevYear) {
       const prevProp = prevYear.realestate.find(p => p.name === prop.name);
-      if (prevProp) {
-        prevKb = prevProp.kbPrice;
-        prevRemainingDebt = prevProp.remainingDebt;
-      }
+      if (prevProp) { prevKb = prevProp.kbPrice; prevRemainingDebt = prevProp.remainingDebt; }
     }
   }
 
@@ -272,42 +258,27 @@ function renderREbox(prop, year, isCurrent, allYears) {
     `;
   } else {
     topRows = `
-      <div class="row"><span class="lbl">시작 KB시세<span class="date" style="margin-left:5px;margin-right:0;">${startDate}</span></span><span class="val linked">↳ ${prevKb ? fmtNum(prevKb) : '—'}</span></div>
-      <div class="row"><span class="lbl">시작 잔여대출<span class="date" style="margin-left:5px;margin-right:0;">${startDate}</span></span><span class="val linked">↳ ${prevRemainingDebt !== null ? fmtNum(prevRemainingDebt) : '—'}</span></div>
+      <div class="row"><span class="lbl">시작 KB시세<span class="date">${startDate}</span></span><span class="val linked">↳ ${prevKb ? fmtNum(prevKb) : '—'}</span></div>
+      <div class="row"><span class="lbl">시작 잔여대출<span class="date">${startDate}</span></span><span class="val linked">↳ ${prevRemainingDebt !== null ? fmtNum(prevRemainingDebt) : '—'}</span></div>
     `;
   }
 
   box.innerHTML = `
     <div class="box-header">
-      <div>
-        <div class="box-name">${prop.name}</div>
-        <div class="box-cat">부동산 · ${owner}</div>
-      </div>
+      <div><div class="box-name">${prop.name}</div><div class="box-cat">부동산 · ${owner}</div></div>
       <div class="box-r ${rClass}"><span class="r-label">SimpleR</span>${rText}</div>
     </div>
     ${topRows}
-    <div class="row input-row"><span class="lbl">Input <span style="font-size:9px;color:var(--ink-muted);">(갚은 원금)</span></span><span class="val ${prop.yearInput ? '' : 'tbd'}">${prop.yearInput ? fmtNum(prop.yearInput) : '입력대기'}</span></div>
-    <div class="row"><span class="lbl">KB시세<span class="date" style="margin-left:5px;margin-right:0;">${evalDateStr}</span></span><span class="val ${prop.kbPrice ? (isCurrent ? 'live' : '') : 'tbd'}">${prop.kbPrice ? fmtNum(prop.kbPrice) : '입력대기'}</span></div>
-    <div class="row net-row"><span class="lbl">NET<span class="date" style="margin-left:5px;margin-right:0;">${evalDateStr}</span></span><span class="val">${prop.net ? fmtNum(prop.net) : '—'}</span></div>
+    <div class="row input-row"><span class="lbl">Input <span style="font-size:8px;color:#5a6280;">(갚은 원금)</span></span><span class="val ${prop.yearInput ? '' : 'tbd'}">${prop.yearInput ? fmtNum(prop.yearInput) : '입력대기'}</span></div>
+    <div class="row"><span class="lbl">KB시세<span class="date">${evalDateStr}</span></span><span class="val ${prop.kbPrice ? (isCurrent ? 'live' : '') : 'tbd'}">${prop.kbPrice ? fmtNum(prop.kbPrice) : '입력대기'}</span></div>
+    <div class="row net-row"><span class="lbl">NET<span class="date">${evalDateStr}</span></span><span class="val">${prop.net ? fmtNum(prop.net) : '—'}</span></div>
   `;
   return box;
 }
 
-function formatEvalDate(year, item, isCurrent) {
-  // For current year, use today's date
-  if (isCurrent) {
-    const t = new Date();
-    return `${String(t.getFullYear()).substring(2)}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
-  }
-  return (year + '-12-31').substring(2);
-}
-
 function buildDonutGradient(alloc) {
   const order = ['부동산', '퇴직금', '연금', 'BTC', '주식'];
-  const colors = {
-    '부동산': '#4dabf7', '퇴직금': '#c5b3ff', '연금': '#00e5a0',
-    'BTC': '#ff7a45', '주식': '#ffcc00'
-  };
+  const colors = {'부동산': '#4dabf7', '퇴직금': '#c5b3ff', '연금': '#00e5a0', 'BTC': '#ff7a45', '주식': '#ffcc00'};
   let acc = 0;
   const stops = [];
   let hasData = false;
@@ -319,8 +290,7 @@ function buildDonutGradient(alloc) {
       acc += pct;
     }
   });
-  if (!hasData) return null;
-  return `conic-gradient(${stops.join(', ')})`;
+  return hasData ? `conic-gradient(${stops.join(', ')})` : null;
 }
 
 function renderSummary(year) {
@@ -339,29 +309,20 @@ function renderSummary(year) {
 
   const allocBlock = el('div', 'alloc-block');
   const grad = buildDonutGradient(a);
-  const donutStyle = grad ? `style="background: ${grad};"` : 'class="donut placeholder"';
-
   allocBlock.innerHTML = `
     <div class="donut-wrap">
-      <div ${grad ? 'class="donut" ' + donutStyle : 'class="donut placeholder"'}></div>
+      <div class="donut ${grad ? '' : 'placeholder'}" ${grad ? `style="background: ${grad};"` : ''}></div>
       <div class="donut-center">
         <span class="lbl">TTL</span>
-        <span class="val">${a.ttl ? (a.ttl >= 1e8 ? Math.round(a.ttl/1e6) + 'M' : fmtNum(a.ttl)) : '—'}</span>
+        <span class="val">${fmtCompact(a.ttl)}</span>
         <span class="sub">${year.evalDate || (year.year + '.12.31')}</span>
       </div>
     </div>
     <div class="donut-legend">
       ${['부동산','퇴직금','연금','BTC','주식'].map(k => {
         const item = a[k] || {amount: 0, pct: 0};
-        const c = {'부동산':'var(--c-부동산)','퇴직금':'var(--c-퇴직금)','연금':'var(--c-연금)','BTC':'var(--c-btc)','주식':'var(--c-주식)'}[k];
-        return `
-          <div class="legend-row" style="border-left-color:${c};">
-            <span class="dot" style="background:${c};"></span>
-            <span class="name">${k}</span>
-            <span class="pct">${item.pct ? (item.pct*100).toFixed(1)+'%' : '—'}</span>
-            <span class="amt">${item.amount ? fmtNum(item.amount) : '—'}</span>
-          </div>
-        `;
+        const c = {'부동산':'#4dabf7','퇴직금':'#c5b3ff','연금':'#00e5a0','BTC':'#ff7a45','주식':'#ffcc00'}[k];
+        return `<div class="legend-row" style="border-left-color:${c};"><span class="dot" style="background:${c};"></span><span class="name">${k}</span><span class="pct">${item.pct ? (item.pct*100).toFixed(1)+'%' : '—'}</span><span class="amt">${item.amount ? fmtNum(item.amount) : '—'}</span></div>`;
       }).join('')}
     </div>
   `;
@@ -372,29 +333,22 @@ function renderSummary(year) {
 function renderYear(year, isCurrent, allYears) {
   const sec = el('section', 'year-block');
   const isPast = !isCurrent && year.year < new Date().getFullYear();
-
   const header = el('div', 'year-header');
   header.innerHTML = `
     <span class="yr">${year.year}</span>
-    <span class="label">${isCurrent ? '현재 연도 — 평가금은 현 시점 스냅샷' : (isPast ? '과거 연도' : '미래')}</span>
+    <span class="label">${isCurrent ? '현재 — 현 시점' : '과거'}</span>
     <span class="badge ${isCurrent ? 'current' : 'past'}">${isCurrent ? '● Current' : 'Past'}</span>
   `;
   sec.appendChild(header);
 
   const buildBoxes = () => {
     const wrap = document.createElement('div');
-
-    // Connection flow note (if any account has start != -1)
     const hasLinked = year.simple.some(a => a.start !== -1) || year.realestate.some(p => p.trackYear > 1);
     if (hasLinked) {
-      const flow = el('div', 'connection-flow',
-        `<span class="arrow">↳</span> 연초 = 전년 연말 자동참조 &nbsp;·&nbsp;
-         <span class="arrow">↳</span> 부동산 시작 잔여대출 = 전년 잔여 + 그해 갚은 원금`);
-      wrap.appendChild(flow);
+      wrap.appendChild(el('div', 'connection-flow', `<span class="arrow">↳</span> 연초 = 전년 연말 자동참조`));
     }
-
     if (year.simple.length > 0) {
-      wrap.appendChild(el('div', 'section-title', `단순형 계좌 (${year.simple.length}개)`));
+      wrap.appendChild(el('div', 'section-title', `단순형 (${year.simple.length})`));
       const grid = el('div', 'simple-grid');
       year.simple.forEach(acc => grid.appendChild(renderSimpleBox(acc, year.year, isCurrent)));
       wrap.appendChild(grid);
@@ -412,7 +366,7 @@ function renderYear(year, isCurrent, allYears) {
     const detail = document.createElement('details');
     detail.className = 'detail-toggle';
     const total = year.simple.length + year.realestate.length;
-    detail.innerHTML = `<summary>📂 계좌별 상세 보기 (${total}개 계좌)<span class="arrow">▶</span></summary>`;
+    detail.innerHTML = `<summary>📂 계좌별 상세 (${total})<span class="arrow">▶</span></summary>`;
     const inner = el('div', 'inner');
     inner.appendChild(buildBoxes());
     detail.appendChild(inner);
@@ -422,7 +376,7 @@ function renderYear(year, isCurrent, allYears) {
   }
 
   if (year.summary) {
-    sec.appendChild(el('div', 'section-title', `${year.year}년 집계${isCurrent ? ' · 현 시점' : ''}`));
+    sec.appendChild(el('div', 'section-title', `${year.year} 집계${isCurrent ? ' · 현 시점' : ''}`));
     sec.appendChild(renderSummary(year));
   }
   return sec;
@@ -430,21 +384,13 @@ function renderYear(year, isCurrent, allYears) {
 
 function renderREtotal(properties) {
   const sec = el('section', 'permanent');
-  sec.innerHTML = `
-    <div class="head">
-      <h2><em>부동산</em> 토탈</h2>
-      <span class="sub">BUY → 현 시점 누적 수익률</span>
-    </div>
-  `;
+  sec.innerHTML = `<div class="head"><h2><em>부동산</em> 토탈</h2><span class="sub">BUY → 현 시점</span></div>`;
   const grid = el('div', 'perm-grid');
   properties.forEach(p => {
     const box = el('div', 'box cat-부동산');
     box.innerHTML = `
       <div class="box-header">
-        <div>
-          <div class="box-name">${p.name}</div>
-          <div class="box-cat">${p.buyDate || ''} BUY</div>
-        </div>
+        <div><div class="box-name">${p.name}</div><div class="box-cat">${p.buyDate || ''} BUY</div></div>
         <div class="box-r ${pctClass(p.annualized)}"><span class="r-label">Annualized</span>${fmtPct(p.annualized)}</div>
       </div>
       <div class="row"><span class="lbl">BUY</span><span class="val">${fmtNum(p.buyPrice)}</span></div>
@@ -452,7 +398,7 @@ function renderREtotal(properties) {
       <div class="row"><span class="lbl">CUM INPUT</span><span class="val">${fmtNum(p.cumInput)}</span></div>
       <div class="row"><span class="lbl">KB시세 (현)</span><span class="val live">${fmtNum(p.kbPrice)}</span></div>
       <div class="row net-row"><span class="lbl">NET</span><span class="val">${fmtNum(p.net)}</span></div>
-      <div class="row" style="margin-top:6px;"><span class="lbl">Total Return</span><span class="val ${pctClass(p.totalReturn)}">${fmtPct(p.totalReturn)}</span></div>
+      <div class="row" style="margin-top:4px;"><span class="lbl">Total Return</span><span class="val ${pctClass(p.totalReturn)}">${fmtPct(p.totalReturn)}</span></div>
     `;
     grid.appendChild(box);
   });
@@ -462,46 +408,35 @@ function renderREtotal(properties) {
 
 function showError(msg) {
   document.getElementById('status').classList.add('error');
-  document.getElementById('status-text').textContent = '오류 발생';
+  document.getElementById('status-text').textContent = '오류';
   const dash = document.getElementById('dashboard');
   dash.innerHTML = '';
-  const err = el('div', 'error-msg', '데이터 가져오기 실패<br><br>' + msg + '<br><br>GAS_URL이 정확한지, Apps Script가 배포되었는지 확인하세요.');
-  dash.appendChild(err);
+  dash.appendChild(el('div', 'error-msg', '데이터 가져오기 실패<br><br>' + msg));
 }
 
 async function load() {
   document.getElementById('status').classList.remove('error');
   document.getElementById('status-text').textContent = '로딩 중...';
-
   const url = window.GAS_URL;
   if (!url || url.indexOf('PASTE_YOUR') === 0) {
-    showError('GAS_URL이 설정되지 않음. config.js 파일에서 GAS_URL을 본인 Apps Script Web App URL로 교체하세요.');
+    showError('GAS_URL 미설정. config.js 확인');
     return;
   }
-
   try {
     const res = await fetch(url + '?t=' + Date.now());
     const data = await res.json();
     if (data.error) { showError(data.error); return; }
-
-    const ts = new Date(data.lastUpdated).toLocaleString('ko-KR', {
-      month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit'
-    });
-    document.getElementById('status-text').textContent = `✓ 업데이트: ${ts}`;
-
+    const ts = new Date(data.lastUpdated).toLocaleString('ko-KR', {month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
+    document.getElementById('status-text').textContent = `✓ ${ts}`;
     const dash = document.getElementById('dashboard');
     dash.innerHTML = '';
-
     if (!data.years || data.years.length === 0) {
-      dash.appendChild(el('div', 'empty-state', '아직 데이터가 없습니다. 시트의 연말평가/월별입력을 채워주세요.'));
+      dash.appendChild(el('div', 'empty-state', '데이터 없음'));
       return;
     }
-
     data.years.forEach(yr => {
       dash.appendChild(renderYear(yr, yr.year === data.currentYear, data.years));
     });
-
     if (data.realestateTotal && data.realestateTotal.length > 0) {
       dash.appendChild(renderREtotal(data.realestateTotal));
     }
