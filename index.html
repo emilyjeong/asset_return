@@ -76,13 +76,13 @@ padding: 5px 12px; cursor: pointer; border-radius: 4px; transition: all 0.15s;
 .simple-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
 .realestate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 10px; }
 
-.box { background: var(–bg-card); border: 1px solid var(–line); border-radius: 10px; padding: 14px 14px 14px 18px; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
-.box::before { content: ‘’; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 2px; background: var(–line); }
-.box.cat-주식::before    { background: var(–c-주식); }
-.box.cat-연금::before    { background: var(–c-연금); }
-.box.cat-퇴직금::before  { background: var(–c-퇴직금); }
-.box.cat-BTC::before     { background: var(–c-btc); }
-.box.cat-부동산::before  { background: var(–c-부동산); }
+.box { background: var(–bg-card); border: 1px solid var(–line); border-radius: 10px; padding: 14px 14px 14px 20px; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+.box::before { content: ‘’; position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 0 2px 2px 0; background: var(–line); z-index: 1; }
+.box.cat-주식::before    { background: var(–c-주식); box-shadow: 0 0 8px var(–c-주식); }
+.box.cat-연금::before    { background: var(–c-연금); box-shadow: 0 0 8px var(–c-연금); }
+.box.cat-퇴직금::before  { background: var(–c-퇴직금); box-shadow: 0 0 8px var(–c-퇴직금); }
+.box.cat-BTC::before     { background: var(–c-btc); box-shadow: 0 0 8px var(–c-btc); }
+.box.cat-부동산::before  { background: var(–c-부동산); box-shadow: 0 0 8px var(–c-부동산); }
 .box.is-new::after { content: ‘NEW’; position: absolute; top: 10px; right: 10px; background: var(–gold); color: var(–bg); font-size: 9px; font-weight: 700; letter-spacing: 0.15em; padding: 2px 7px; font-family: var(–mono); border-radius: 3px; }
 .box.live-snap { background: linear-gradient(180deg, rgba(255,77,106,0.06) 0%, var(–bg-card) 60%); }
 
@@ -448,7 +448,7 @@ function renderREtotal(properties) {
         <div class="box-r ${pctClass(p.annualized)}"><span class="r-label">Annualized</span>${fmtPct(p.annualized)}</div>
       </div>
       <div class="row"><span class="lbl">BUY</span><span class="val">${fmtNum(p.buyPrice)}</span></div>
-      <div class="row"><span class="lbl">STR_DEBT</span><span class="val">+${fmtNum(p.initialDebt)}</span></div>
+      <div class="row"><span class="lbl">잔여대출</span><span class="val">${fmtNum(p.remainingDebt)}</span></div>
       <div class="row"><span class="lbl">CUM INPUT</span><span class="val">${fmtNum(p.cumInput)}</span></div>
       <div class="row"><span class="lbl">KB시세 (현)</span><span class="val live">${fmtNum(p.kbPrice)}</span></div>
       <div class="row net-row"><span class="lbl">NET</span><span class="val">${fmtNum(p.net)}</span></div>
