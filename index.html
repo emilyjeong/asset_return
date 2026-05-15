@@ -1160,18 +1160,14 @@ function renderYear(year, isCurrent, allYears) {
     return wrap;
   };
 
-  if (isPast) {
-    const detail = document.createElement('details');
-    detail.className = 'detail-toggle';
-    const total = year.simple.length + year.realestate.length;
-    detail.innerHTML = `<summary>📂 계좌별 상세 (${total})<span class="arrow">▶</span></summary>`;
-    const inner = el('div', 'inner');
-    inner.appendChild(buildBoxes());
-    detail.appendChild(inner);
-    sec.appendChild(detail);
-  } else {
-    sec.appendChild(buildBoxes());
-  }
+  const detail = document.createElement('details');
+  detail.className = 'detail-toggle';
+  const total = year.simple.length + year.realestate.length;
+  detail.innerHTML = `<summary>📂 계좌별 상세 (${total})<span class="arrow">▶</span></summary>`;
+  const inner = el('div', 'inner');
+  inner.appendChild(buildBoxes());
+  detail.appendChild(inner);
+  sec.appendChild(detail);
 
   if (year.summary) {
     sec.appendChild(el('div', 'section-title', `${year.year} 집계${isCurrent ? ' · 현 시점' : ''}`));
