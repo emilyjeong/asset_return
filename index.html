@@ -634,6 +634,35 @@ body {
 }
 
 /* ═══════════════════════════════════════════════
+   LOADER (돈가방 통통)
+   ═══════════════════════════════════════════════ */
+.loader {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  color: var(--ink-mid);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.loader::before {
+  content: '💰';
+  font-size: 64px;
+  display: inline-block;
+  animation: loader-bounce 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 24px rgba(232, 184, 0, 0.35));
+}
+@keyframes loader-bounce {
+  0%, 100% { transform: scale(1)    translateY(0);    opacity: 0.9; }
+  50%      { transform: scale(1.15) translateY(-6px); opacity: 1;   }
+}
+   
+/* ═══════════════════════════════════════════════
    INPUT FORM
    ═══════════════════════════════════════════════ */
 .form-wrap {
@@ -821,7 +850,9 @@ body {
     <span><span class="live-dot"></span><span id="status-text">로딩 중...</span></span>
     <button class="refresh-btn" onclick="load()">↻ 새로고침</button>
   </div>
-  <div id="dashboard"></div>
+  <div id="dashboard">
+    <div class="loader">자산 불러오는 중...</div>
+  </div>
 </div>
 
 <div class="view" id="view-input">
@@ -1254,7 +1285,8 @@ function showError(msg) {
 
 async function load() {
   document.getElementById('status').classList.remove('error');
-  document.getElementById('status-text').textContent = '로딩 중...';
+  document.getElementById('status-text').textContent = '자산 불러오는 중...';
+  document.getElementById('dashboard').innerHTML = '<div class="loader">자산 불러오는 중...</div>';
   const url = window.GAS_URL;
   if (!url || url.indexOf('PASTE_YOUR') === 0) {
     showError('GAS_URL 미설정. config.js 확인');
